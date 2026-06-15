@@ -4,9 +4,12 @@ import axios from 'axios'
 import API_URL from "../config";
 
 function Login() {
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-
+  const [otp, setOtp] = useState("");
+  const [showOtp, setShowOtp] = useState(false);
+  const [loggedInUser, setLoggedInUser] = useState(null);
   const [user, setUser] = useState({
     email: "",
     password: ""
@@ -18,38 +21,94 @@ function Login() {
       [e.target.name]: e.target.value
     });
   };
+const handleLogin = async (e) => {
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
+  if (loading) return;
 
-      const response = await axios.post(
-        `${API_URL}/users/login`,
-        user
+  setLoading(true);
+
+  try {
+
+    const response = await axios.post(
+      `${API_URL}/users/login`,
+      user
+    );
+
+    if (response.data) {
+      setLoggedInUser(response.data);
+
+      await axios.post(
+        `${API_URL}/users/send-otp`,
+        null,
+        {
+          params: {
+            email: user.email
+          }
+        }
       );
 
-      if (response.data) {
+      setShowOtp(true);
 
-        localStorage.setItem(
-          "user",
-          JSON.stringify(response.data)
-        );
+      alert("OTP sent to your email");
 
-        alert("Login Successful!");
+    } else {
 
-        navigate("/");
+      alert("Invalid Email or Password");
 
-      } else {
-        alert("Invalid Email or Password");
-      }
-
-    } catch (error) {
-      console.log(error);
-      alert("Login Failed");
     }
-  };
 
+  } catch (error) {
+
+    console.log(error);
+
+    alert("Login Failed");
+
+  } finally {
+
+    setLoading(false);
+
+  }
+
+};
+
+
+const verifyOtp = async () => {
+
+  try {
+
+    const response = await axios.post(
+      `${API_URL}/users/verify-otp`,
+      null,
+      {
+        params: {
+          email: user.email,
+          otp: otp
+        }
+      }
+    );
+
+    if (response.data) {
+
+ localStorage.setItem(
+  "user",
+  JSON.stringify(loggedInUser)
+);
+
+      alert("Login Successful");
+
+      navigate("/");
+
+    }
+
+  } catch (error) {
+
+    alert("Invalid OTP");
+
+  }
+
+};
   return (
 
     <div className="auth-page">
@@ -58,6 +117,7 @@ function Login() {
       login-card">
         <h2>Welcome Back</h2>
 
+        
         <form onSubmit={handleLogin}>
 
           <input
@@ -80,9 +140,43 @@ function Login() {
             required
           />
 
-          <button type="submit" className="auth-btn">
-            Login
-          </button>
+          {showOtp && (
+            <input
+              type="text"
+              placeholder="Enter OTP"
+              className="auth-input"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+              required
+            />
+          )}
+
+
+
+          {!showOtp ? (
+
+            <button
+              type="submit"
+              className="auth-btn"
+              disabled={loading}
+            >
+              {loading ? "Sending OTP..." : "Login"}
+            </button>
+
+          ) : (
+
+            <button
+              type="button"
+              className="auth-btn"
+              onClick={verifyOtp}
+            >
+              Verify OTP
+            </button>
+
+          )}
+
+
+
 
         </form>
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   NavLink,
   useNavigate,
@@ -19,9 +19,7 @@ function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  if (location.pathname.startsWith("/admin")) {
-    return null;
-  }
+  
 
   const user =
     JSON.parse(localStorage.getItem("user"));
@@ -36,19 +34,50 @@ function Navbar() {
       ).length
     : 0;
 
-  const cartCount = user
-    ? (
-        JSON.parse(
-          localStorage.getItem(
-            `cart_${user.id}`
-          )
-        ) || []
-      ).reduce(
-        (total, item) =>
-          total + (item.quantity || 1),
-        0
-      )
-    : 0;
+
+const [cartCount, setCartCount] = useState(0);
+
+useEffect(() => {
+
+  const updateCartCount = () => {
+
+    const count = user
+      ? (
+          JSON.parse(
+            localStorage.getItem(
+              `cart_${user.id}`
+            )
+          ) || []
+        ).reduce(
+          (total, item) =>
+            total + (item.quantity || 1),
+          0
+        )
+      : 0;
+
+    setCartCount(count);
+
+  };
+
+  updateCartCount();
+
+  window.addEventListener(
+    "cartUpdated",
+    updateCartCount
+  );
+
+  return () =>
+    window.removeEventListener(
+      "cartUpdated",
+      updateCartCount
+    );
+
+}, [user]);
+
+if (location.pathname.startsWith("/admin")) {
+    return null;
+  }
+
 
   return (
 

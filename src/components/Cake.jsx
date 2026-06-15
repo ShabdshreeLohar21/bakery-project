@@ -211,10 +211,10 @@ function Cake() {
           >
 
             <img
-              src={`/images/${product.category.toLowerCase()}/${product.imageUrl}`}
-              alt={product.name}
-              className="product-img"
-            />
+            src={cakeImages[product.id]}
+            alt={product.name}
+            className="product-img"
+          />
 
             <div className="product-info">
 

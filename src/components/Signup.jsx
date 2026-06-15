@@ -33,17 +33,23 @@ function Signup() {
         }
       )
 
-      const data = await response.json()
+      if (response.ok) {
 
-      alert("Signup Successful!")
+        alert("Signup Successful!");
 
-      console.log(data)
+        setUser({
+          username: "",
+          email: "",
+          password: ""
+        });
 
-      setUser({
-        username: "",
-        email: "",
-        password: ""
-      })
+      } else {
+
+        alert("Signup Failed!");
+
+      }
+
+   
 
     } catch (error) {
       console.log(error)

@@ -2585,3 +2585,64 @@ footer{
 .logout-btn:hover{
   opacity:0.9;
 }
+
+
+@media (max-width: 768px) {
+
+  .header{
+    flex-direction: column;
+    padding: 15px;
+    top: 0;
+  }
+
+  .logo img{
+    width: 140px !important;
+  }
+
+  .menu{
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px !important;
+    margin: 15px 0;
+  }
+
+  .menu a{
+    font-size: 14px;
+  }
+
+  .header-icons{
+    gap: 8px !important;
+  }
+
+  .icon-box{
+    width: 42px;
+    height: 42px;
+    font-size: 18px;
+  }
+
+  .home-container{
+    flex-direction: column;
+    text-align: center;
+    padding: 140px 20px 40px;
+  }
+
+  .home-left,
+  .home-right{
+    width: 100%;
+  }
+
+  .brand-name{
+    font-size: 48px !important;
+    line-height: 55px !important;
+  }
+
+  .tagline{
+    width: 100%;
+    font-size: 16px;
+  }
+
+  .hero-cake{
+    max-width: 320px;
+    width: 100%;
+  }
+}

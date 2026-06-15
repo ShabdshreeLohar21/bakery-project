@@ -1,15 +1,22 @@
 import cartbg from "../assets/cart.jpg";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+
 
 function Cart() {
-
+  
+  
+const navigate = useNavigate();
   const user =
     JSON.parse(localStorage.getItem("user"));
 
   const cartKey =
     user ? `cart_${user.id}` : "cart";
 
-  const cartItems =
-    JSON.parse(localStorage.getItem(cartKey)) || [];
+    const [cartItems, setCartItems] = useState(
+  JSON.parse(localStorage.getItem(cartKey)) || []
+);
 
   const total = cartItems.reduce(
     (sum, item) =>
@@ -19,23 +26,29 @@ function Cart() {
 
   const updateQuantity = (index, change) => {
 
-    let updatedCart = [...cartItems];
+  let updatedCart = [...cartItems];
 
-    updatedCart[index].quantity =
-      (updatedCart[index].quantity || 1) + change;
+  updatedCart[index].quantity =
+    (updatedCart[index].quantity || 1) + change;
 
-    if (updatedCart[index].quantity <= 0) {
+  if (updatedCart[index].quantity <= 0) {
 
-      updatedCart.splice(index, 1);
+    updatedCart.splice(index, 1);
 
-    }
+  }
 
-    localStorage.setItem(
-      cartKey,
-      JSON.stringify(updatedCart)
-    );
+  setCartItems(updatedCart);
 
-    window.location.reload();
+  localStorage.setItem(
+    cartKey,
+    JSON.stringify(updatedCart)
+  );
+
+  window.dispatchEvent(
+  new Event("cartUpdated")
+);
+
+
 
   };
 
@@ -134,8 +147,7 @@ function Cart() {
               <button
                 className="checkout-btn"
                 onClick={() =>
-                  window.location.href =
-                    "/checkout"
+                 navigate("/checkout")
                 }
               >
                 Proceed To Checkout
