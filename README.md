@@ -1,8 +1,7 @@
-# 🍰 BakeryHub - Full Stack Bakery E-Commerce & Order Management System
+# 🍰 Sugarplum Desert's- Full Stack Bakery E-Commerce & Order Management System
 
 ## 📌 Project Overview
-
-BakeryHub is a full-stack e-commerce application developed using React.js, Spring Boot, Spring Security, and MySQL.
+It is a commerceack e-commerce application developed using React.js, Spring Boot, Spring Security, and MySQL.
 
 The platform allows customers to browse bakery products, manage shopping carts, place orders, maintain wishlists, and securely authenticate using OTP verification. An administrative dashboard enables efficient product and order management.
 
